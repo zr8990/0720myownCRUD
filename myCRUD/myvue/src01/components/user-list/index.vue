@@ -9,8 +9,8 @@
 <el-row>
   <el-col :span="8">
     <div class="grid-content bg-purple search">
-      <el-input placeholder="请输入内容" v-model="input5" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
+        <el-button slot="append" icon="el-icon-search" @click='search'></el-button>
       </el-input>
     </div>
   </el-col>
@@ -72,24 +72,27 @@
       </template>
     </el-table-column>
   </el-table>
+
   <!-- 分页 -->
-  <el-pagination background layout="prev, pager, next" :page-size='pageSize' :total="total" @curpage-change = 'getCurPageUserList'>
-</el-pagination>
+  <el-pagination background layout="prev, pager, next" :page-size='pageSize' :total="total" @current-change = 'getCurPageUserList'>
+  </el-pagination>
+
   </div>
-  
 </template>
 <script>
 import axios from "axios";
 export default {
-  // name: "UserList",
+  /**
+   * 指定组件的name属性，那么devtools工具中的组件数中会以name的属性为准，来显示组件的名称
+   */
+  name: "UserList",
   data() {
     return {
-  
-      pageSize: 2,
-      total: 0,
-      value1:'',
-      userList: [],
-      searchText:''
+      pageSize: 2,//每页条数
+      total: 0,//总条数
+      // value1:'',
+      userList: [],//用户列表数据
+      searchText:''//搜索文本
     };
   },
   created() {
