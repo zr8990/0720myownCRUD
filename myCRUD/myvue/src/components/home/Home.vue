@@ -139,6 +139,7 @@ export default {
         a {
           color: red;
           font-weight: 700;
+          font-size: 16px;
         }
       }
      
