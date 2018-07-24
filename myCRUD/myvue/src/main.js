@@ -13,7 +13,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/common.less'
 
-Vue.use(ElementUI);
+Vue.use(ElementUI)
 import axios from 'axios'
 Vue.prototype.$http = axios
 

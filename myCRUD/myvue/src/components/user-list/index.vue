@@ -116,21 +116,24 @@
 
 <!-- 角色分配 -->
 <el-dialog title="分配角色" :visible.sync="dialogRoleFormVisible">
-  <el-form :model="roleForm" label-width = "120px">
+  <el-form :model="roleForm" label-width = "80px">
     <el-form-item label="用户名">
       <el-input v-model="roleForm.username" disabled></el-input>
     </el-form-item>
     <el-form-item label="角色列表">
-      <el-select v-model="roleForm.list" placeholder="0">
-        <el-option label="主管" value="manager"></el-option>
-        <el-option label="程序员" value="technology"></el-option>
-        <el-option label="测试" value="test"></el-option>
-      </el-select>
+      <el-select v-model="defaultValue" placeholder="请选择">
+        <el-option
+          v-for="item in rolesList"
+          :key="item.id"
+          :label="item.roleName"
+          :value="item.id">
+        </el-option>
+  </el-select>
     </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogRoleFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="roleList">确 定</el-button>
+    <el-button type="primary" @click="roleAssign">确 定</el-button>
   </div>
 </el-dialog>
   </div>
@@ -179,14 +182,17 @@ export default {
       dialogRoleFormVisible: false,
       roleForm:{
         username:'',
-        roleId:'',
+        roleName:'',
         id:-1
-      }
+      },
+      rolesList:[],
+      defaultValue:''
     }
     
   },
   created() {
     this.getUserList();
+    this.getRoleList()
   },
   methods: {
     getUserList(curpage = 1,searchText ='') {
@@ -253,40 +259,38 @@ export default {
       this.dialogFormVisible = true
     },
     addUserInfo() {
+      this.$refs.addUserForm.validate((valid) => {
+        if (valid) {
+          // alert('submit!');
+          this.$http
+          .post(`/users`,this.addUserForm)
+          .then((res)=>{
+            console.log(res)
+            const { data,meta } = res.data
+            if(meta.status === 201){
+              this.dialogFormVisible = false
+              this.getUserList()
+              this.$refs.addUserForm.resetFields()
 
-        this.$refs.addUserForm.validate((valid) => {
-          if (valid) {
-            // alert('submit!');
-            this.$http
-            .post(`/users`,this.addUserForm)
-            .then((res)=>{
-              console.log(res)
-              const { data,meta } = res.data
-              if(meta.status === 201){
-                this.dialogFormVisible = false
-                this.getUserList()
-                this.$refs.addUserForm.resetFields()
+              this.$message({
+                message:"添加用户成功",
+                type: 'success',
+                duration:500
+              });
 
+            }else if(meta.status === 400){
                 this.$message({
-                  message:"添加用户成功",
-                  type: 'success',
-                  duration:500
-                });
-
-              }else if(meta.status === 400){
-                 this.$message({
-                  message: meta.msg,
-                  type: 'error',
-                  
-                });
-              }
-            })
-          } else {      
-            return false;
-          }
-        })
-      },
-
+                message: meta.msg,
+                type: 'error',
+                
+              });
+            }
+          })
+        } else {      
+          return false;
+        }
+      })
+    },
     showDialogEdit(rows) {
       this.dialogEditFormVisible = true
 
@@ -346,20 +350,53 @@ export default {
     },
     showRoleList(Rows){
       this.dialogRoleFormVisible = true;
+      // console.log(Rows)
       this.roleForm.username =  Rows.username
-      this.roleForm.roleId = Rows.role_id
+      this.roleForm.roleName = Rows.role_name
       this.roleForm.id = Rows.id
     },
-    roleList(){
+    getRoleList(){
+      this.$http
+        .get(`roles`)
+        .then((res)=>{
+          // console.log(res)
+          const {data} = res.data
+          this.rolesList = data
+        })
+    },
+    roleAssign(){
       console.log(565)
+      const id = this.roleForm.id
       this.$http
         .put(`/users/${id}/`)
+        .then((res)=>{
+          console.log(res)
+          const { data, meta } = res.data
+          if(meta.status === 200){
+              this.$message({
+              message:"修改角色成功",
+              type: 'success',
+              duration:500,
+            });
+            this.dialogRoleFormVisible = false
+          }else{
+            this.$message({
+              message:meta.msg,
+              type: 'error',
+              duration:500
+            });
+          }
+          
+        })
     }
   }
  }
 </script>
 
 <style>
+.el-main {
+  text-align: left;
+}
 .el-row {
   margin-top: 10px;
   margin-bottom: 10px;

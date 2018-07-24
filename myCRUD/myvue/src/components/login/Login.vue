@@ -7,7 +7,7 @@
     </el-form-item>
 
     <el-form-item label="密码" prop="password">
-      <el-input v-model="ruleForm.password"></el-input>
+      <el-input v-model="ruleForm.password" @keyup.enter.native = "submitForm"></el-input>
     </el-form-item>
 
     <el-form-item>

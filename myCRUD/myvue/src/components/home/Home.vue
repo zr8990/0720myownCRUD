@@ -140,7 +140,7 @@ export default {
   .el-header {
     background-color: #B3C0D1;
     color: #333;
-    text-align: center;
+    // text-align: center;
     height: 60px;
     .el-col:nth-child(1){
       text-align: left;
@@ -175,7 +175,7 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
+    // text-align: center;
   }
   
   body > .el-container {
