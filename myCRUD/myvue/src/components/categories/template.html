@@ -17,7 +17,6 @@
     level-key="cat_level"
     width="320"
     :indent-size="20">
-
     <template slot-scope="scope">
       <span>{{ scope.row.cat_name }}</span>
     </template>
@@ -50,14 +49,11 @@
         <el-input v-model="categoryAddForm.cat_name"></el-input>
       </el-form-item>
       <el-form-item label="父级名称">
-        <el-select v-model="defaultValue" placeholder="请选择">
-          <el-option
-            v-for="item in rolesList"
-            :key="item.id"
-            :label="item.roleName"
-            :value="item.id">
-          </el-option>
-    </el-select>
+        <el-cascader :options="categories" 
+        :props="{label:'cat_name',value:'cat_id'}" 
+        :change-on-select="true"
+        v-model="categoryAddForm.cat_pid">
+        </el-cascader>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

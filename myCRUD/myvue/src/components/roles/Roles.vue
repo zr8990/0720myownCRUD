@@ -78,13 +78,13 @@
     show-checkbox
     default-expand-all
     node-key="id"
-    ref="tree"
+    ref="rightsTree"
     highlight-current
     :props="defaultProps">
   </el-tree>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    <el-button type="primary" @click="addAssignRights">确 定</el-button>
   </div>
 </el-dialog>
   </div>
@@ -109,9 +109,10 @@ export default {
   methods:{
     async getRolesList(){
       const res = await this.$http.get(`/roles`)
-      console.log(res)
+      // console.log(res)
       const {data,meta} = res.data
       this.rolesList = data
+      this.curSelRoleId = data.id
     },
     indexMethod(index) {
     return index 
@@ -121,7 +122,7 @@ export default {
       const { data, meta } = res.data
       this.rightsTreeList = data
       this.dialogTreeVisible = true
-      console.log(data)
+      // console.log(data)
       this.$nextTick(()=>{
         const menuThreeIds = []
         role.children.forEach((menu1)=>{
@@ -131,13 +132,29 @@ export default {
             })
           })
         })
-        this.$refs.tree.setCheckedKeys(menuThreeIds)
+        this.$refs.rightsTree.setCheckedKeys(menuThreeIds)
       })
     },
     showRightsAssign(role){
       
       this.curSelRoleId = role.id
       this.getRightsList(role)
+    },
+    async addAssignRights(){
+      const checkedRights = this.$refs.rightsTree.getCheckedKeys()
+      const checkedHalfRights = this.$refs.rightsTree.getHalfCheckedKeys()
+      const allChecked = [...checkedRights,...checkedHalfRights]
+
+      const res = await this.$http.post(`/roles/${this.curSelRoleId}/rights`,{
+        rids:allChecked.join(',')
+      })
+      console.log(res)
+      const {meta} = res.data
+      if(meta.status === 200){
+        this.dialogTreeVisible = false
+        this.getRolesList()
+      }
+      
     }
   }
   

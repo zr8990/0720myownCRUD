@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/Login'
 import Home from '@/components/home/Home'
-import index from '@/components/user-list/'
+import index from '@/components/users/'
 import Rights from '@/components/rights/Rights'
 import Roles from '@/components/roles/Roles'
 import Goods from '@/components/goods/Goods'
-import Category from '@/components/category/Category'
+import Category from '@/components/categories/Category'
 
 Vue.use(Router)
 
@@ -14,7 +14,6 @@ const router = new Router({
   routes: [
     {
       path: '/login',
-      // name: 'HelloWorld',
       component: Login
     },
     {
@@ -22,7 +21,7 @@ const router = new Router({
       component:Home,
       children:[
         {
-          path:'/user-list',
+          path:'/users',
           component:index
         },
         {
@@ -38,7 +37,7 @@ const router = new Router({
           component:Goods
         },
         {
-          path:'/category',
+          path:'/categories',
           component:Category
         },
       ]
