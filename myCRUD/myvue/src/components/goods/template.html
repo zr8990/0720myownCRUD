@@ -1,6 +1,6 @@
 <div class="goods">
   <el-row>
-    <el-button type="success" plain>添加商品</el-button>
+    <el-button type="success" plain @click="$router.push('/goods_add')">添加商品</el-button>
   </el-row>
   <el-table
   ref="singleTable"
@@ -33,7 +33,9 @@
       label="操作">
     </el-table-column>
   </el-table>
-  <el-pagination @current-change = "getGoodsList"
+  <el-pagination 
+  @current-change = "getCurPage"
+  :current-page="curpage"
   background
   layout="prev, pager, next"
   :total="total">

@@ -7,11 +7,16 @@ import Rights from '@/components/rights/Rights'
 import Roles from '@/components/roles/Roles'
 import Goods from '@/components/goods/Goods'
 import Category from '@/components/categories/Category'
+import GoodsAdd from '@/components/goods_add/GoodsAdd'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
+    {
+      path:"/",
+      redirect:'/home'
+    },
     {
       path: '/login',
       component: Login
@@ -33,13 +38,17 @@ const router = new Router({
           component:Roles
         },
         {
-          path:'/goods',
-          component:Goods
-        },
-        {
           path:'/categories',
           component:Category
         },
+        {
+          path:'/goods/:page?',
+          component:Goods
+        },
+        {
+          path:'/goods_add',
+          component:GoodsAdd
+        }
       ]
     },
    

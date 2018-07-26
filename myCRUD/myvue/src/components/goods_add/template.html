@@ -1,0 +1,61 @@
+<div class="goods_add">
+  <el-steps :active="active" finish-status="success">
+    <el-step title="步骤 1" description="基本信息"></el-step>
+    <el-step title="步骤 2" description="商品图片"></el-step>
+    <el-step title="步骤 3" description="商品内容"></el-step>
+  </el-steps>
+  
+  <el-tabs tab-position="left" @tab-click="changeTab" v-model="activeName">
+    <el-tab-pane label="基本信息" name="basic">
+      <el-form 
+      label-width="80px" :model="goodsAddForm">
+        <el-form-item label="商品名称">
+          <el-input v-model="goodsAddForm.goods_name"></el-input>
+        </el-form-item>
+        <el-form-item label="商品价格">
+          <el-input v-model="goodsAddForm.goods_price"></el-input>
+        </el-form-item>
+        <el-form-item label="商品重量">
+          <el-input v-model="goodsAddForm.goods_weight"></el-input>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="goodsAddForm.goods_number"></el-input>
+        </el-form-item>
+        <el-form-item label="商品分类">
+          <el-cascader
+            :options="cateGoodsList"
+            v-model="goodsAddForm.goods_cat"
+            :props="{
+              label: 'cat_name',
+              value: 'cat_id'
+            }">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="是否促销">
+          <el-radio v-model="radio" label="1">是</el-radio>
+          <el-radio v-model="radio" label="2">否</el-radio>
+        </el-form-item>
+        <el-button type="primary" style="margin-top: 12px;" @click="next(1,'pic')">下一步</el-button>
+      </el-form>
+    </el-tab-pane>
+    <el-tab-pane label="商品图片" name="pic">
+      <el-upload
+        class="uploadGoodsAdd"
+        :action="uploadUrl"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        list-type="picture" 
+        method="post">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+      <el-button type="primary" style="margin-top: 12px;" @click="next(2,'content')">下一步</el-button>
+    </el-tab-pane>
+    <el-tab-pane label="商品内容" name="content">
+      <quill-editor>
+      </quill-editor>
+      <el-button type="primary" style="margin-top: 12px;" @click="addGoods()">确定</el-button>
+    </el-tab-pane>
+  </el-tabs>
+
+</div>
